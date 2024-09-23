@@ -91,6 +91,8 @@ void start() {
     std::vector<std::vector<char>> board(SIZE_OF_BOARD, std::vector<char>(SIZE_OF_BOARD, ' '));
 
     while (!WIN) {
+        clear_terminal();
+        printTitle();
         drawBoard(board);
         moves(board, player);
     }
