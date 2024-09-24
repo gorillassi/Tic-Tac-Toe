@@ -47,7 +47,7 @@ bool win_check(const std::vector<std::vector<char>> &board, char player) {
 }
 
 bool checking_correct_moves(const std::vector<std::vector<char>> &board, int x, int y) {
-    return board[x][y] == ' ';
+    return (x >= 0 && x < SIZE_OF_BOARD && y >= 0 && y < SIZE_OF_BOARD && board[x][y] == ' ');
 }
 
 bool is_board_full(const std::vector<std::vector<char>> &board) {
@@ -63,17 +63,22 @@ bool is_board_full(const std::vector<std::vector<char>> &board) {
 
 void moves(std::vector<std::vector<char>> &board, char &player) {
     int x, y;
-    std::cout << "Player " << player << ", make a move (row and column): ";
-    std::cin >> x >> y;
+    while (true) {
+        std::cout << "Player " << player << ", make a move (row and column): ";
+        if (std::cin >> x >> y) {
+            if (checking_correct_moves(board, x, y)) {
+                board[x][y] = player;
+                break;
+            } else {
+                std::cout << "INCORRECT MOVE!! Please try again." << std::endl;
+            }
+        } else {
+            std::cout << "Invalid input! Please enter numbers." << std::endl;
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
 
-    if (x < 0 || x >= SIZE_OF_BOARD || y < 0 || y >= SIZE_OF_BOARD || !checking_correct_moves(board, x, y)) {
-        std::cout << "INCORRECT MOVE!! Please try again." << std::endl;
-        moves(board, player);
-        return; 
     }
-
-    board[x][y] = player; 
-
     if (win_check(board, player)) {
         board[x][y] = player;
         drawBoard(board);
